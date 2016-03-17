@@ -1,90 +1,65 @@
 
-
-# co-eventemitter
-[![Inline docs](http://inch-ci.org/github/Cereceres/co-Eventemitter.svg?branch=master)](http://inch-ci.org/github/Cereceres/co-Eventemitter)
-[![Circle CI](https://circleci.com/gh/Cereceres/co-Eventemitter.svg?style=svg)](https://circleci.com/gh/Cereceres/co-Eventemitter)
-
-
-co-eventemitter for JavaScript
+# co-promise
+co-promise for JavaScript
 
 # Installing
 
 ```bash
-$ npm install co-eventemitter
+$ npm install co-promise
 ```
 
 # Getting starter
 
 ```js
 
-let CoEvent = require( 'co-eventemitter' )
-let coEvent = new CoEvent() // you can pass a object to co-eventemitter constructor
-// that will be used or passed as thisArg to every generator.
+let CoPromise = require( 'co-promise' )
 ```
 # Usage
 
 Create
 
 ```js
-let count = 0
+
 //the generator are called with a arg and next, what is the next generator
-let gen1 = function* ( arg, next ) {
-  // every generator is evaluated with the arguments
-  // passed when the event was emitted and the last
-  // param is the next generator in the array listener
-  // or handler event.
-  count++
+let gen1 = function*(resolve, reject) {
   // every generator is wrapper with co
-  let res = yield Promise.resolve( 4 )
-  assert.equal( res, 4 )
-  //this statement pass the control flow to next generator in the array
-  yield next
-  assert.equal( arg, {a:3})
+  let res = yield Promise.resolve(4)
+  assert.equal(res, 4)
+    //this promise is resolved with 6
+  let dist = Math.random()
+  if (dist > 0.5) {
+    resolve(dist)
+  } else if (dist < 0.2) {
+    reject(dist)
+  } else {
+    throw 'hola'
+  }
 }
-
-let gen2 = function* ( arg ) {
-  // the last generator in the array not receive the
-  // next generator.
-  count++
-  let res = yield Promise.resolve( '54' )
-  assert.equal( res, '54' )
-  assert.equal.deep( arg, {a:3} )
-}
-coEvent.on( 'test', gen1, gen2 ) // returns itself, you can pass as many generators as you need queue
-coEvent.emit( 'test',{a:3}) // return a promise that is resolved when every generator is finish
-// every error is catched and the promise is rejected with that error. Also error event is amitted when this
-// error is catched
-// every generator is called with arg={a:3}
-
-assert.equal( count,2 )
-// count is equal to generator number
-// the emitter property is a EventEmitter instance self,
-// where every method and property affect to CoEvent instance too.
-// Also can use once method exposed to CoEvent to use generators wrapper
-// with co.
+CoPromise(gen1)
+.then(function*(res) {
+    let _res = yield Promise.resolve(res)
+    assert(_res > 0.5) // true
+    done()
+  })
+  .catch(function*(_error) {
+    let error = yield Promise.resolve(_error)
+    assert(error === 'hola' || error < 0.2) // true
+    done()
+  })
 ```
-### `Class Co-eventemitter`
-#### `Co-eventemitter([thisArg])`
-To instance the co-eventemitter you can pass a thisArg object what will be passed to every generator as thisArg.
+### `Class Co-promise`
+#### `Co-promise(Generator,[thisArg])`
+To instance the co-promise you pass the Generator to be iterated and a thisArg to be used
 
-### `Instance Co-eventemitter`
-#### `co-eventemitter.on(String,Generator[,Generator...])`
-This method added the Generators passed to event Handler of event given(String). Returns itself.
+### `Instance Co-promise`
+#### `co-promise.then(resHandler[,rejHandler])`
+This method is like the ordinary promises, but resHandler and rejHandler are Generators, return a co-promise.
 
-#### `co-eventemitter.once(String,Generator[,Generator...])`
-This method added the Generators passed to event Handler of event given(String) to be emitted only one time. Returns itself.
+#### `co-promise.catch(rejHandler)`
+This method is like the ordinary promises, but  rejHandler are Generators, return a co-promise.
 
-#### `co-eventemitter.emit(String,Object[,Object...])`
-This method emit the event event given(String) and pass every Object argument to every constructor. Returns a promise that is resolved when the every generator of event is finished or rejected if a error happen. If a error is through the error event is emitted or if a listener is not found the event "NotListener" also is through and the promise is resolved with the arguments passed when the event was emitted.
-
-#### `co-eventemitter.emitter`
-Instance of EventEmitter, every change here affect to co-eventemitter instance.
-
-#### `co-eventemitter.events`
-Object where the keys are the events added and values are arrays with the listers generators to every event.
-
-#### `co-eventemitter.ctx`
-thisArg passed to every generator, this is the same passed to constructor and can be
+#### `co-promise.ctx`
+thisArg passed to every generator, this is the same passed to constructor like thisArg and can be
 upgraded at any time.
 
 # Testing

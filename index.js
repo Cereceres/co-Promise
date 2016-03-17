@@ -10,9 +10,6 @@ class CoPromise {
     /**
      * if is not called with new, a instance of CoPromise is returned
      */
-    if (!(this instanceof CoPromise)) {
-      return new CoPromise(generator, ctx)
-    }
     this.generator = generator
       /**
        *  ctx to be used in every generator
@@ -26,8 +23,10 @@ class CoPromise {
       co.call(_this.ctx, _this.generator, resolve, reject).then(
         function(res) {
           _this.coRes = res
+          return res
         }).catch(function(error) {
         _this.coError = error
+        reject(error)
       })
     });
 
@@ -42,15 +41,20 @@ class CoPromise {
       let _p = new CoPromise(function*(resolve, rej) {
         let p = _this.promise
           .then(function(res) {
-            co(resHandler, res || _this.coRes).then(resolve)
+            co.call(_this.ctx, resHandler, res || _this.coRes).then(
+              resolve).catch(rej)
           })
-        if (typeof rejHandler === 'function') {
-          p.catch(function(error) {
-            co(rejHandler, error || _this.coError).then(rej)
-          })
-        } else {
-          _p.coError = _this.coError
-        }
+        p.catch(function(error) {
+          _this.coError = error || _this.coError
+          if (typeof rejHandler === 'function') {
+            co.call(_this.ctx, rejHandler, _this.coError).then(
+              resolve).catch(rej)
+          } else {
+            _p.coError = error || _this.coError
+            rej(_p.coError)
+            return
+          }
+        })
         yield Promise.resolve()
       }, _this.ctx)
       return _p
@@ -59,7 +63,10 @@ class CoPromise {
       let _p = new CoPromise(function*(resolve, rej) {
         if (typeof rejHandler === 'function') {
           _this.promise.catch(function(error) {
-            co(rejHandler, error || _this.coError).then(rej)
+            _this.coError = error || _this.coError
+            co.call(_this.ctx, rejHandler, _this.coError)
+              .then(
+                resolve).catch(rej)
           })
         } else {
           _p.coError = _this.coError

@@ -1,7 +1,7 @@
 {
-  "name": "co-eventemitter",
-  "version": "0.0.15",
-  "description": "wrapper to co and Eventemitter",
+  "name": "co-promise",
+  "version": "0.0.1",
+  "description": "wrapper to co and Promise",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -15,17 +15,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Cereceres/co-Eventemitter.git"
+    "url": "https://github.com/Cereceres/co-Promise.git"
   },
   "keywords": [
     "co",
-    "event",
+    "Promise",
     "generators"
   ],
   "author": "Jesus Cereceres",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Cereceres/co-Eventemitter/issues"
+    "url": "https://github.com/Cereceres/co-Promise/issues"
   },
-  "homepage": "https://github.com/Cereceres/co-Eventemitter/#readme"
+  "homepage": "https://github.com/Cereceres/co-Promise/#readme"
 }

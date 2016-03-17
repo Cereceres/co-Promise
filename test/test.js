@@ -1,34 +1,36 @@
 'use strict'
-let assert = require( 'assert' )
-let CoEvent = require( '../index' )
-let count = 0
+let assert = require('assert')
+let CoPromise = require('../index')
 
-describe( 'Test for Coevent', function ( ) {
-  this.timeout( 10000 )
-  before( function ( ) {
-    this.Myemmiter = new CoEvent( )
-    this.gen1 = function* ( arg, next ) {
-      count++
-      let res = yield Promise.resolve( 4 )
-      assert.equal( res, 4 )
-      yield next
-      assert.equal( arg, 'hola' )
+describe('Test for CoPromise', function() {
+  before(function() {
+    //the generator are called with a arg and next, what is the next generator
+    this.gen1 = function*(resolve, reject) {
+      // every generator is wrapper with co
+      let res = yield Promise.resolve(4)
+      assert.equal(res, 4)
+        //this promise is resolved with 6
+      let dist = Math.random()
+      if (dist > 0.5) {
+        resolve(dist)
+      } else if (dist < 0.2) {
+        reject(dist)
+      } else {
+        throw 'hola'
+      }
     }
-
-    this.gen2 = function* ( arg ) {
-      count++
-      let res = yield Promise.resolve( '54' )
-      assert.equal( res, '54' )
-      assert.equal( arg, 'hola' )
-    }
-    this.Myemmiter.on( 'test', this.gen1, this.gen2 )
-  } )
-  it( 'should send a post', function ( done ) {
-    this.Myemmiter.emit( 'test', 'hola' )
-      .then( function ( ) {
-        assert.equal( count, 2 )
-        done( )
-      } )
-      .catch( done )
-  } )
-} )
+  })
+  it('should resolve the promise', function(done) {
+    (new CoPromise(this.gen1))
+    .then(function*(res) {
+        let _res = yield Promise.resolve(res)
+        assert(_res > 0.5) // true
+        done()
+      })
+      .catch(function*(_error) {
+        let error = yield Promise.resolve(_error)
+        assert(error === 'hola' || error < 0.2) // true
+        done()
+      })
+  })
+})
