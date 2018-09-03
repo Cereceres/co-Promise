@@ -1,18 +1,18 @@
 
-# co-promise
-co-promise for JavaScript
+# co-promising
+co-promising for JavaScript
 
 # Installing
 
 ```bash
-$ npm install co-promise
+$ npm install co-promising
 ```
 
 # Getting starter
 
 ```js
 
-let CoPromise = require( 'co-promise' )
+let CoPromise = require( 'co-promising' )
 ```
 # Usage
 
@@ -47,24 +47,24 @@ CoPromise(gen1)
     done()
   })
 ```
-### `Class Co-promise`
-#### `Co-promise(Generator,[thisArg])`
-To instance the co-promise you pass the Generator to be iterated and a thisArg to be used
+### `Class co-promising`
+#### `co-promising(Generator,[thisArg])`
+To instance the co-promising you pass the Generator to be iterated and a thisArg to be used
 
-### `Class Co-promise`
+### `Class co-promising`
 
-#### Co-promise.reject(error) => CoPromisesRejected
-#### Co-promise.resolve(res) => CoPromisesResolved
-#### Co-promise.all(arrayPromises) => CoPromisesResolvedWithArrayPromises
+#### co-promising.reject(error) => CoPromisesRejected
+#### co-promising.resolve(res) => CoPromisesResolved
+#### co-promising.all(arrayPromises) => CoPromisesResolvedWithArrayPromises
 
-### `Instance Co-promise method`
-#### `co-promise.then(resHandler[,rejHandler])`
-This method is like the ordinary promises, but resHandler and rejHandler are Generators, return a co-promise.
+### `Instance co-promising method`
+#### `co-promising.then(resHandler[,rejHandler])`
+This method is like the ordinary promises, but resHandler and rejHandler are Generators, return a co-promising.
 
-#### `co-promise.catch(rejHandler)`
-This method is like the ordinary promises, but  rejHandler are Generators, return a co-promise.
+#### `co-promising.catch(rejHandler)`
+This method is like the ordinary promises, but  rejHandler are Generators, return a co-promising.
 
-#### `co-promise.ctx`
+#### `co-promising.ctx`
 thisArg passed to every generator, this is the same passed to constructor like thisArg and can be
 upgraded at any time.
 

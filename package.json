@@ -1,5 +1,5 @@
 {
-  "name": "co-promise",
+  "name": "co-promising",
   "version": "1.0.0",
   "description": "wrapper to co and Promise",
   "main": "index.js",

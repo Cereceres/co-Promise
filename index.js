@@ -3,10 +3,10 @@ const co = require('co')
 class CoPromise{
   constructor(generator, ctx) {
     this.generator = generator
-    this.ctx = ctx || this
+    this.ctx = ctx
     var _this = this
     this.promise = new Promise((resolve, reject) => co
-      .call(_this.ctx, _this.generator, resolve, reject))
+      .call(ctx || this, _this.generator, resolve, reject))
   }
 
     then(resHandler, rejHandler) {
@@ -25,7 +25,7 @@ class CoPromise{
       return new CoPromise(function*(resolve, reject){
         const res = yield Promise.all(arrayPromises).catch(reject)
         resolve(res)
-      })
+      }, this)
     }
 
     static reject(error){
