@@ -51,7 +51,13 @@ CoPromise(gen1)
 #### `Co-promise(Generator,[thisArg])`
 To instance the co-promise you pass the Generator to be iterated and a thisArg to be used
 
-### `Instance Co-promise`
+### `Class Co-promise`
+
+#### Co-promise.reject(error) => CoPromisesRejected
+#### Co-promise.resolve(res) => CoPromisesResolved
+#### Co-promise.all(arrayPromises) => CoPromisesResolvedWithArrayPromises
+
+### `Instance Co-promise method`
 #### `co-promise.then(resHandler[,rejHandler])`
 This method is like the ordinary promises, but resHandler and rejHandler are Generators, return a co-promise.
 
