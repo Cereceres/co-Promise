@@ -1,6 +1,6 @@
 {
   "name": "co-promise",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "wrapper to co and Promise",
   "main": "index.js",
   "directories": {
