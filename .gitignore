@@ -5,6 +5,7 @@
 logs
 *.log
 node_modules
+.vscode
 
 # Runtime data
 pids
